@@ -124,7 +124,11 @@ elif option == "Crime Data Visualization":
     # Filter out the 'Total' row from the chart
     chart_data = state_crime_totals[state_crime_totals['District'] != 'Total']
 
-    state_crime_chart = alt.Chart(chart_data).mark_bar().encode(
+        # Filter out the "Total" column from chart_data
+    filtered_data = chart_data[chart_data['District'] != 'Total']
+
+    # Create the chart with the filtered data
+    state_crime_chart = alt.Chart(filtered_data).mark_bar().encode(
         x=alt.X('District:N', title='District'),
         y=alt.Y('sum(Murder):Q', title='Total Murders'),
         color=alt.Color('District:N', legend=None),
@@ -132,6 +136,111 @@ elif option == "Crime Data Visualization":
     ).properties(
         title=f'Comparison of Crime across Cities in {selected_state}'
     )
+
+    # Render the chart
     st.altair_chart(state_crime_chart, use_container_width=True)
+
+# Comparison Visualization: Crime data for all cities in the selected state
+    # st.subheader(f'Crime Comparison in {selected_state}')
+    # state_crime_totals = state_data.groupby('District')[crime_columns].sum().reset_index()
+    # Create a bar chart comparison of crimes across cities in the selected state
+    # Filter out the 'Total' row from state_crime_totals
+    filtered_state_crime_totals = state_crime_totals[state_crime_totals['District'] != 'Total']
+
+    # Create the state crime chart with the filtered data
+    state_crime_chart = alt.Chart(filtered_state_crime_totals).mark_bar().encode(
+        x='District:N',
+        y='sum(Murder):Q',
+        color='District:N',
+        tooltip=crime_columns
+    ).properties(
+        title=f'Comparison of Murder Crime across Cities in {selected_state}'
+    )
+
+    # Prepare the crime type distribution chart
+    crime_type_distribution = state_data.melt(
+        id_vars='District',
+        value_vars=crime_columns, 
+        var_name='CrimeType', 
+        value_name='CrimeCount'
+    )
+
+    crime_distribution_chart = alt.Chart(crime_type_distribution).mark_bar(size=20).encode(
+        x=alt.X('CrimeType:N', axis=alt.Axis(labelAngle=0), sort=None),
+        y='sum(CrimeCount):Q',
+        color='CrimeType:N',
+        tooltip=['CrimeType', 'sum(CrimeCount)']
+    ).properties(
+        width=400,
+        title=f'Crime Type Distribution in {selected_state}'
+    ).configure_axisX(
+        labelAngle=0,
+        labelPadding=5
+    ).configure_view(
+        strokeWidth=0
+    )
+
+    # Display the charts
+    st.altair_chart(crime_distribution_chart, use_container_width=True)
+    st.altair_chart(state_crime_chart, use_container_width=True)
+
+
+elif option == "Danger Level Assessment":
+    # Danger Level Assessment
+    st.subheader('Danger Level Assessment')
+    # Dropdown for state selection
+    states = data['States/UTs'].unique()
+    selected_state = st.selectbox('Select a state:', states)
+
+    # Filter the data for the selected state
+    state_data = data[data['States/UTs'] == selected_state]
+
+    # Dropdown for city selection (within the selected state)
+    cities_in_state = state_data['District'].unique()
+    selected_city = st.selectbox('Select a city in the state:', cities_in_state)
+
+    # Filter data based on the selected city
+    city_data = state_data[state_data['District'] == selected_city]
+
+    danger_levels = city_data[crime_columns].sum().sum()  # Sum of all crimes in the selected city
+
+    if danger_levels > 500:
+        st.error(f'Danger Level: High ({danger_levels} crimes reported)')
+    elif 100 < danger_levels <= 500:
+        st.warning(f'Danger Level: Medium ({danger_levels} crimes reported)')
+    else:
+        st.success(f'Danger Level: Low ({danger_levels} crimes reported)')
+
+elif option == "Crime Type Distribution":
+    # Additional Plot: Crime Type Distribution across the State
+
+    # Dropdown for state selection
+    states = data['States/UTs'].unique()
+    selected_state = st.selectbox('Select a state:', states)
+
+    st.subheader(f'Crime Type Distribution in {selected_state}')
+    # Filter data for the selected state
+    state_data = data[data['States/UTs'] == selected_state]
+    
+    crime_type_distribution = state_data.melt(id_vars='District', value_vars=crime_columns, 
+                                              var_name='CrimeType', value_name='CrimeCount')
+
+    crime_distribution_chart = alt.Chart(crime_type_distribution).mark_bar(size=20).encode(
+        x=alt.X('CrimeType:N', axis=alt.Axis(labelAngle=0),  # Keep crime types in their original order
+                sort=None),  # Ensure no sorting happens
+        y='sum(CrimeCount):Q',
+        color='CrimeType:N',
+        tooltip=['CrimeType', 'sum(CrimeCount)']
+    ).properties(
+        width=400,  # Adjust the width of the chart to reduce overall bar spacing
+        title=f'Crime Type Distribution in {selected_state}'
+    ).configure_axisX(
+        labelAngle=0,  # Ensures labels are horizontal
+        labelPadding=5  # Adjusts padding for label readability
+    ).configure_view(
+        strokeWidth=0  # Removes border around the chart for a cleaner look
+    )
+
+    st.altair_chart(crime_distribution_chart, use_container_width=True)
 
 
