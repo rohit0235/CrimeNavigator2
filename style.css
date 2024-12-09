@@ -1,0 +1,81 @@
+/* General Styling */
+body {
+    font-family: 'Poppins', sans-serif; /* Stylish and clean font */
+    background: linear-gradient(to bottom right, #e0f7fa, #e3f2fd); /* Vibrant gradient background */
+    margin: 0;
+    padding: 0;
+    color: #222; /* Neutral text color */
+    text-decoration: none; /* Remove underlines globally */
+}
+
+/* Centered Main Content */
+.homepage-container {
+    margin: 0 auto; /* Center-align horizontally */
+    padding: 2rem; /* Add padding for spacing */
+    max-width: 900px; /* Limit width for readability */
+    text-align: center; /* Center-align text */
+}
+
+/* Title Styling */
+.title {
+    font-size: 3rem; /* Large font size */
+    font-weight: 800; /* Extra bold for emphasis */
+    color: #1a237e; /* Deep vibrant blue */
+    margin-bottom: 1.5rem; /* Space below the title */
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    text-decoration: none; /* Ensure no underline */
+}
+
+/* Description Styling */
+.description {
+    font-size: 1.5rem; /* Larger font for readability */
+    color: #37474f; /* Muted dark gray */
+    line-height: 1.8; /* Improved line spacing */
+    margin-bottom: 2rem; /* Space below the description */
+    text-decoration: none; /* Ensure no underline */
+}
+
+/* Features Section */
+.features h3,
+.upcoming-features h3 {
+    font-size: 2rem; /* Prominent headings */
+    font-weight: 700; /* Bold font */
+    color: #004d40; /* Dark teal for contrast */
+    text-align: center; /* Center-align headings */
+    text-decoration: none; /* Ensure no underline */
+}
+
+.features ul,
+.upcoming-features ul {
+    list-style: none; /* Remove default bullet styles */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+}
+
+.features li,
+.upcoming-features li {
+    font-size: 1.2rem; /* Medium font size for clarity */
+    color: #ffffff; /* White text for contrast */
+    background: linear-gradient(to right, #00796b, #004d40); /* Teal gradient for vibrancy */
+    padding: 1rem 1.5rem; /* Add padding around text */
+    margin: 0.8rem 0; /* Add spacing between items */
+    border-radius: 10px; /* Rounded corners for a modern look */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth animations */
+    text-decoration: none; /* Ensure no underline */
+}
+
+.features li:hover,
+.upcoming-features li:hover {
+    transform: scale(1.05); /* Subtle zoom effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Add shadow on hover */
+    cursor: pointer; /* Change cursor to pointer for interactivity */
+}
+
+/* Footer Styling */
+.footer {
+    font-size: 1.2rem; /* Medium font size for footer */
+    color: #616161; /* Soft gray for subtle look */
+    margin-top: 3rem; /* Space above footer */
+    text-align: center; /* Center-align text */
+    text-decoration: none; /* Ensure no underline */
+}
